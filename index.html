@@ -69,7 +69,7 @@ h1, h2, h3 { font-family: var(--display); }
 
 /* ---------- impaginazione ---------- */
 main { max-width: 1480px; margin: 0 auto; padding: 22px 28px calc(110px + var(--nav-h)); }
-main:has(> .dash.on) { padding-bottom: 22px; }
+main:has(> .dash.on) { padding-bottom: calc(22px + var(--nav-h)); }
 .view { display: none; }
 .view.on { display: block; animation: fade .3s var(--ease); }
 @keyframes fade { from { opacity: 0; transform: translateY(4px); } }
@@ -393,7 +393,7 @@ body { font-size: 14.5px; letter-spacing: .005em; }
   .ins-foot { position: fixed; left: 12px; right: 12px; bottom: calc(var(--nav-h) + 12px); z-index: 15; border: 1px solid rgba(173,196,230,.16); border-radius: 16px; background: rgba(30,42,63,.95); backdrop-filter: blur(14px); box-shadow: var(--sh); }
   .ins-foot.off { display: none; }
 }
-main:has(> .ins.on) { padding-bottom: 22px; }
+main:has(> .ins.on) { padding-bottom: calc(22px + var(--nav-h)); }
 @media (min-width: 881px) { .toasts { top: calc(var(--top-h, 72px) + 14px); bottom: auto; } }
 
 /* ===== v7: minimal ===== */
@@ -620,7 +620,7 @@ h1, h2, h3, .fig .v, .board-h h2, .toolbar h2 { letter-spacing: -.025em; }
 .brand-home h1 { transition: color .15s; }
 .menu { right: auto; left: max(28px, calc((100vw - 1480px) / 2 + 28px)); }
 .view.fit.on { display: flex; flex-direction: column; gap: 16px; height: calc(100vh - var(--top-h, 72px) - 44px); }
-main:has(> .fit.on) { padding-bottom: 22px; }
+main:has(> .fit.on) { padding-bottom: calc(22px + var(--nav-h)); }
 .view.fit .toolbar { margin-bottom: 0; flex: none; }
 .view.fit .figures { flex: none; margin: 0 !important; }
 .view.fit .grow { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; margin: 0; }
@@ -775,6 +775,13 @@ main:has(> .fit.on) { padding-bottom: 22px; }
 .cod-row b { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 17px; letter-spacing: .04em; color: var(--ink); }
 .att-st .no-acc { color: var(--accent); }
 .att-act .btn { height: 30px; padding: 0 10px; font-size: 12.5px; }
+@media (max-width: 880px) { main:has(> .ins.on) { padding-bottom: calc(110px + var(--nav-h)); } }
+@media (max-width: 880px) {
+  /* Salva agganciato sopra la barra in basso, a tutta larghezza (niente card che galleggia sul contenuto) */
+  .ins-foot { left: 0; right: 0; bottom: var(--nav-h); border: 0; border-top: 1px solid var(--line); border-radius: 0;
+              background: var(--bg); backdrop-filter: none; box-shadow: none; padding: 10px 16px; z-index: 19; }
+  main:has(> .ins.on) { padding-bottom: calc(96px + var(--nav-h)); }
+}
 </style>
 </head>
 <body>
