@@ -1,0 +1,29 @@
+# Tiene attivo il progetto Supabase gratuito (si mette in pausa dopo 7 giorni senza uso)
+# e, una volta al mese, aggiorna un file per non far spegnere questo controllo a GitHub.
+name: Sveglia database
+on:
+  schedule:
+    - cron: '17 6 * * *'      # ogni giorno alle 6:17 UTC
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sveglia:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Chiama il database
+        run: |
+          URL=$(grep -oP "const SUPABASE_URL = '\K[^']+" index.html)
+          KEY=$(grep -oP "const SUPABASE_KEY = '\K[^']+" index.html)
+          AUTH=""
+          case "$KEY" in eyJ*) AUTH="Authorization: Bearer $KEY";; esac
+          curl -fsS -X POST "$URL/rest/v1/rpc/ping" -H "apikey: $KEY" ${AUTH:+-H "$AUTH"} -H "Content-Type: application/json" -d '{}'
+      - name: Segno mensile
+        if: github.event_name == 'schedule'
+        run: |
+          if [ "$(date -u +%d)" = "01" ]; then
+            date -u +%Y-%m-%d > .ultimo-controllo
+            git config user.name "sveglia"; git config user.email "sveglia@users.noreply.github.com"
+            git add .ultimo-controllo && git commit -m "Controllo mensile" && git push || true
+          fi

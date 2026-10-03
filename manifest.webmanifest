@@ -1,0 +1,12 @@
+{
+  "name": "Prestazioni aggiuntive ambulatoriali",
+  "short_name": "Prestazioni",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0C111C",
+  "theme_color": "#0C111C",
+  "icons": [
+    { "src": "icona-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icona-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
