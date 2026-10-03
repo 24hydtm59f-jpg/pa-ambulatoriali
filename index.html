@@ -759,7 +759,7 @@ main:has(> .fit.on) { padding-bottom: 22px; }
 .login-err { color: var(--danger); font-size: 12.5px; min-height: 0; }
 .login-err:empty { display: none; }
 .login-note { color: var(--faint); font-size: 12px; text-align: center; }
-.login-hint { color: var(--muted); font-size: 12px; margin-top: -8px; }
+.lbl-sub { color: var(--faint); font-weight: 400; }
 .cod-box { display: grid; gap: 10px; padding: 14px 16px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--line); }
 .cod-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .cod-row span { color: var(--muted); font-size: 12.5px; }
@@ -774,8 +774,7 @@ main:has(> .fit.on) { padding-bottom: 22px; }
   <form class="login-box" id="loginForm" autocomplete="on">
     <div class="login-brand"><div class="lg-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M12 9v6M9 12h6"/></svg></div><h1>Prestazioni aggiuntive ambulatoriali</h1><p>S.O.C. Ortopedia e Traumatologia, Verduno</p></div>
     <div class="login-card">
-      <div class="field"><label for="lgUser">Utente</label><input class="ctrl" id="lgUser" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="iniziale del nome + cognome"></div>
-      <div class="login-hint">Tutto minuscolo e senza spazi: Mario Rossi → mrossi, Anna De Luca → adeluca</div>
+      <div class="field"><label for="lgUser">Utente <span class="lbl-sub">· iniziale del nome + cognome</span></label><input class="ctrl" id="lgUser" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"></div>
       <div class="field"><label for="lgPw">Password</label><input class="ctrl" id="lgPw" name="password" type="password" autocomplete="current-password"></div>
       <div class="login-err" id="lgErr"></div>
       <button class="btn btn-primary" id="lgBtn" type="submit"><span>Entra</span></button>
