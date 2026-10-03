@@ -1148,9 +1148,11 @@ const SUPABASE_KEY = 'sb_publishable_SxqPXcn-Z8LCynjZcAZwsA_9yeQBeUt';   // "pub
       throw new Error(msg);
     }
     if (dati && dati.errore) throw new Error(dati.errore);
+    if (!pubblica) { S.ultimoUso = Date.now(); store.set('ultimoUso', S.ultimoUso); }
     return dati;
   }
   function toast(msg, tipo) {
+    if (/accesso scaduto/i.test(msg)) return;            // si torna al login senza messaggi
     const t = document.createElement('div');
     t.className = 'toast' + (tipo === 'err' ? ' err' : '');
     t.innerHTML = (tipo === 'err' ? ICO.err : ICO.ok) + '<div>' + esc(msg) + '</div>';
@@ -1872,7 +1874,7 @@ const SUPABASE_KEY = 'sb_publishable_SxqPXcn-Z8LCynjZcAZwsA_9yeQBeUt';   // "pub
   function esci(scaduto) {
     if (!scaduto && S.token) api('apiLogout').catch(() => {});
     S.token = ''; store.set('token', '');
-    mostraLogin(scaduto ? 'Accesso scaduto: entra di nuovo.' : '');
+    mostraLogin('');
   }
   $('loginForm').onsubmit = async e => {
     e.preventDefault();
@@ -1882,6 +1884,7 @@ const SUPABASE_KEY = 'sb_publishable_SxqPXcn-Z8LCynjZcAZwsA_9yeQBeUt';   // "pub
     try {
       const r = await api('apiLogin', u, pw);
       S.token = r.token; store.set('token', r.token); store.set('utente', u);
+      S.ultimoUso = Date.now(); store.set('ultimoUso', S.ultimoUso);
       S.pwProvv = r.provvisoria ? pw : '';
       $('lgPw').value = '';
       await avvia();
@@ -1919,8 +1922,19 @@ const SUPABASE_KEY = 'sb_publishable_SxqPXcn-Z8LCynjZcAZwsA_9yeQBeUt';   // "pub
   };
   ['pwAtt', 'pwNew', 'pwNew2'].forEach(id => $(id).addEventListener('keydown', e => { if (e.key === 'Enter') $('pwOk').click(); }));
 
+  // l'accesso scade dopo un'ora senza utilizzo (controllato anche dal database)
+  const INATTIVITA = 60 * 60 * 1000;
+  const scaduto = () => !S.ultimoUso || Date.now() - S.ultimoUso > INATTIVITA;
+  function controllaInattivita() { if (S.token && scaduto()) esci(true); }
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') controllaInattivita(); });
+  window.addEventListener('focus', controllaInattivita);
+  window.addEventListener('pageshow', controllaInattivita);
+  setInterval(controllaInattivita, 60 * 1000);
+
   (function init() {
     S.token = store.get('token') || '';
+    S.ultimoUso = store.get('ultimoUso') || 0;
+    if (S.token && scaduto()) { esci(true); return; }
     if (S.token) avvia(); else mostraLogin();
   })();
   function altriMedici() { return S.cfg.medici.filter(m => m.v !== S.io && !inattivo(m.v)); }
