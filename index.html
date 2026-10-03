@@ -783,18 +783,6 @@ main:has(> .fit.on) { padding-bottom: calc(22px + var(--nav-h)); }
   main:has(> .ins.on) { padding-bottom: calc(96px + var(--nav-h)); }
 }
 
-/* calendario */
-.cal-list { display: grid; gap: 2px; margin-top: 12px; max-height: 46vh; overflow: auto; }
-.cal-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; }
-.cal-row:nth-child(odd) { background: var(--surface-2); }
-.cal-row .t { flex: 1; min-width: 0; line-height: 1.3; }
-.cal-row .t b { display: block; font-weight: 600; font-size: 13.5px; }
-.cal-row .t small { color: var(--muted); font-size: 12px; }
-.cal-row .btn { height: 30px; padding: 0 10px; font-size: 12.5px; text-decoration: none; }
-.cal-empty { color: var(--muted); font-size: 13px; padding: 14px 4px; }
-.cal-hint { color: var(--faint); font-size: 12px; margin: 10px 2px 0; }
-.cal-hint b { color: var(--muted); font-weight: 600; }
-@media (max-width: 520px) { .cal-row .btn .lab { display: none; } .cal-row .btn { padding: 0 9px; } .cal-row { padding: 8px; gap: 8px; } }
 </style>
 </head>
 <body>
@@ -881,11 +869,9 @@ main:has(> .fit.on) { padding-bottom: calc(22px + var(--nav-h)); }
     <div class="toolbar">
       <div><div class="list-head"><h2>Ambulatori di</h2><div class="mctl lg"><button class="m-label" data-mpick aria-haspopup="dialog"><span class="mc-lab"></span><svg class="m-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><span class="m-arrows"><button data-mstep="-1" aria-label="Mese precedente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button><button data-mstep="1" aria-label="Mese successivo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button></span></div></div><div class="sub" id="listSub"></div></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-        <div class="seg" id="lVista"><button data-lv="mese" class="on">Tutto il mese</button><button data-lv="medico">Per medico</button></div>
-        <select class="ctrl hidden" id="fMed"><option value="">Tutti i medici</option></select>
         <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="ctrl" id="q" placeholder="Cerca medico, sede, data…"></label>
+        <select class="ctrl" id="fMed"><option value="">Tutti i medici</option></select>
         <select class="ctrl" id="fSede"><option value="">Tutte le sedi</option></select>
-        <button class="btn btn-primary hidden" id="calBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 13v5M9.5 15.5h5"/></svg>Aggiungi al calendario</button>
       </div>
     </div>
     <div class="card grow"><div class="tscroll">
@@ -976,11 +962,6 @@ main:has(> .fit.on) { padding-bottom: calc(22px + var(--nav-h)); }
 </div>
 
 <!-- Modale conferma -->
-<div class="modal" id="mCal" role="dialog" aria-modal="true">
-  <div class="modal-h"><h3 id="calTitle">I miei ambulatori nel calendario</h3><p>Si aggiungono una volta: se poi un ambulatorio cambia, aggiungilo di nuovo.</p></div>
-  <div class="modal-b"><div class="cal-list" id="calList"></div><p class="cal-hint">Google Calendar: usa il pulsante <b>Google</b> accanto a ogni ambulatorio.</p></div>
-  <div class="modal-f"><button class="btn" data-close>Chiudi</button><button class="btn btn-primary" id="calAll"><span>Aggiungi tutti</span></button></div>
-</div>
 <div class="modal" id="mConf" role="dialog" aria-modal="true">
   <div class="modal-h"><h3 id="mcTitle">Eliminare?</h3><p id="mcSub"></p></div>
   <div class="modal-f"><button class="btn" data-close>Annulla</button><button class="btn btn-danger" id="mcOk">Elimina</button></div>
@@ -1124,7 +1105,6 @@ const SUPABASE_KEY = 'sb_publishable_SxqPXcn-Z8LCynjZcAZwsA_9yeQBeUt';   // "pub
     edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
     del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>',
     x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
-    calplus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 13v5M9.5 15.5h5"/></svg>',
     cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
   };
 
@@ -1223,7 +1203,6 @@ const SUPABASE_KEY = 'sb_publishable_SxqPXcn-Z8LCynjZcAZwsA_9yeQBeUt';   // "pub
     if (S.view === 'anno') renderAnno();
     if (S.view === 'med') renderMed();
     if (S.openDay) renderDrawer();
-    if ($('mCal').classList.contains('on') && !S.calSingolo) renderCal();
     renderSavebar();
   }
 
@@ -1334,7 +1313,7 @@ const SUPABASE_KEY = 'sb_publishable_SxqPXcn-Z8LCynjZcAZwsA_9yeQBeUt';   // "pub
   }
   function chiudiTutto() {
     S.openDay = null; S.editing = null;
-    ['overlay', 'drawer', 'mEdit', 'mConf', 'mLet', 'mLink', 'mHelp', 'mTar', 'mAdd', 'mCod', 'mCal'].forEach(id => $(id).classList.remove('on'));
+    ['overlay', 'drawer', 'mEdit', 'mConf', 'mLet', 'mLink', 'mHelp', 'mTar', 'mAdd', 'mCod'].forEach(id => $(id).classList.remove('on'));
     chiudiMenu();
   }
   function renderDrawer() {
@@ -1351,7 +1330,7 @@ const SUPABASE_KEY = 'sb_publishable_SxqPXcn-Z8LCynjZcAZwsA_9yeQBeUt';   // "pub
       const [a, b, sd] = kk.split('|');
       return '<div class="slot"><div class="slot-h"><div class="meta"><span>' + ICO.clock + '<b>' + a + '–' + b + '</b></span><span>' + ICO.pin + esc(sd) + '</span></div><span class="badge">' + g[kk].reduce((x, r) => x + r.visite, 0) + ' visite</span></div>' +
         g[kk].map(r => '<div class="slot-row">' + av(r.medico) + '<div class="nm">' + esc(breve(r.medico)) +
-          '</div><span class="v">' + r.visite + ' v.</span>' + (r.medico === S.io ? '<button class="icon-btn" data-calid="' + esc(r.id) + '" title="Aggiungi al calendario">' + ICO.calplus + '</button>' : '') + '<button class="icon-btn" data-edit="' + esc(r.id) + '" title="Modifica">' + ICO.edit + '</button>' +
+          '</div><span class="v">' + r.visite + ' v.</span><button class="icon-btn" data-edit="' + esc(r.id) + '" title="Modifica">' + ICO.edit + '</button>' +
           '<button class="icon-btn del" data-del="' + esc(r.id) + '" title="Elimina">' + ICO.del + '</button></div>').join('') + '</div>';
     }).join('') : '<div class="empty-big">' + ICO.cal + '<div>Nessun ambulatorio in questo giorno.</div></div>';
   }
@@ -1487,14 +1466,10 @@ const SUPABASE_KEY = 'sb_publishable_SxqPXcn-Z8LCynjZcAZwsA_9yeQBeUt';   // "pub
   // ELENCO
   // =====================================================================
   function renderList() {
-    const perMed = S.lVista === 'medico';
-    document.querySelectorAll('#lVista [data-lv]').forEach(b => b.classList.toggle('on', b.dataset.lv === (perMed ? 'medico' : 'mese')));
-    $('fMed').classList.toggle('hidden', !perMed);
-    const q = $('q').value.trim().toLowerCase(), fm = perMed ? $('fMed').value : '', fs = $('fSede').value;
+    const q = $('q').value.trim().toLowerCase(), fm = $('fMed').value, fs = $('fSede').value;
     const rows = righe().filter(r => (!fm || r.medico === fm) && (!fs || r.sede === fs) &&
       (!q || (breve(r.medico) + ' ' + r.medico + ' ' + r.sede + ' ' + nomeGiorno(r.data) + ' ' + r.inizio).toLowerCase().indexOf(q) >= 0));
     const tot = rows.reduce((a, r) => a + r.visite, 0), ore = rows.reduce((a, r) => a + min(r.fine) - min(r.inizio), 0) / 60;
-    $('calBtn').classList.toggle('hidden', !(perMed && fm && fm === S.io && rows.length));
     $('listSub').textContent = rows.length + (rows.length === 1 ? ' ambulatorio' : ' ambulatori') + ' · ' + tot + ' prime visite · ' + fmtNum(ore) + ' ore';
     if (!rows.length) {
       $('tbody').innerHTML = '<tr><td colspan="6"><div class="empty-big">' + ICO.cal + '<div>Nessun ambulatorio' + (q || fm || fs ? ' con questi filtri' : ' in questo mese') + '.</div></div></td></tr>';
@@ -1511,7 +1486,7 @@ const SUPABASE_KEY = 'sb_publishable_SxqPXcn-Z8LCynjZcAZwsA_9yeQBeUt';   // "pub
         ult = r.data;
       }
       const ore1 = (min(r.fine) - min(r.inizio)) / 60;
-      const act = (r.medico === S.io ? '<button class="icon-btn" data-calid="' + esc(r.id) + '" title="Aggiungi al calendario">' + ICO.calplus + '</button>' : '') + '<button class="icon-btn" data-edit="' + esc(r.id) + '" title="Modifica">' + ICO.edit + '</button><button class="icon-btn del" data-del="' + esc(r.id) + '" title="Elimina">' + ICO.del + '</button>';
+      const act = '<button class="icon-btn" data-edit="' + esc(r.id) + '" title="Modifica">' + ICO.edit + '</button><button class="icon-btn del" data-del="' + esc(r.id) + '" title="Elimina">' + ICO.del + '</button>';
       h += '<tr class="r"><td><b>' + r.inizio + '–' + r.fine + '</b></td><td><span class="who">' + av(r.medico) + esc(breve(r.medico)) + '</span></td><td><span class="where">' + ICO.pin + esc(r.sede) + '</span>' +
         '</td><td class="num">' + fmtNum(ore1) + '</td><td class="num">' + r.visite + '</td><td class="act">' + act + '</td></tr>';
       m += '<div class="m-item">' + av(r.medico) + '<div class="c"><b>' + esc(breve(r.medico)) + '</b><div>' + r.inizio + '–' + r.fine + ' · ' + esc(r.sede) + ' · ' + r.visite + ' visite</div></div>' + act + '</div>';
@@ -1547,7 +1522,7 @@ const SUPABASE_KEY = 'sb_publishable_SxqPXcn-Z8LCynjZcAZwsA_9yeQBeUt';   // "pub
     $('meSave').disabled = !ok || !$('meData').value;
   }
   function chiudiModale() {
-    ['mEdit', 'mConf', 'mLet', 'mLink', 'mHelp', 'mTar', 'mAdd', 'mCod', 'mCal'].forEach(id => $(id).classList.remove('on'));
+    ['mEdit', 'mConf', 'mLet', 'mLink', 'mHelp', 'mTar', 'mAdd', 'mCod'].forEach(id => $(id).classList.remove('on'));
     S.editing = null;
     if (!S.openDay) $('overlay').classList.remove('on');
   }
@@ -1637,15 +1612,6 @@ const SUPABASE_KEY = 'sb_publishable_SxqPXcn-Z8LCynjZcAZwsA_9yeQBeUt';   // "pub
     const de = e.target.closest('[data-del]'); if (de) { chiediElimina(de.dataset.del); }
   });
   ['q', 'fMed', 'fSede'].forEach(id => $(id).addEventListener(id === 'q' ? 'input' : 'change', renderList));
-  S.lVista = 'mese';
-  $('lVista').onclick = e => {
-    const b = e.target.closest('[data-lv]'); if (!b) return;
-    S.lVista = b.dataset.lv;
-    if (S.lVista === 'medico' && !$('fMed').value) $('fMed').value = S.io || '';   // si parte dai propri
-    renderList();
-  };
-  $('fMed').addEventListener('change', () => { if (!$('fMed').value) { S.lVista = 'mese'; renderList(); } });
-  $('calBtn').onclick = () => { S.calSingolo = false; renderCal(); $('overlay').classList.add('on'); $('mCal').classList.add('on'); };
 
   // inserisci
   $('minical').onclick = e => {
@@ -1837,70 +1803,6 @@ const SUPABASE_KEY = 'sb_publishable_SxqPXcn-Z8LCynjZcAZwsA_9yeQBeUt';   // "pub
     return { nome, blob: doc.output('blob'), ambulatori: rows.length, visite, avvisi: [] };
   }
 
-
-  // ---------- calendario (iPhone / Mac / Google) ----------
-  const LUOGHI = { Verduno: 'Ospedale Michele e Pietro Ferrero, Strada del Tanaro 7/9, Verduno (CN)', Alba: 'Alba (CN)', Bra: 'Bra (CN)' };
-  const titoloCal = r => 'Ambulatorio prime visite – ' + r.sede;
-  const notaCal = r => 'Prestazioni aggiuntive ambulatoriali · ' + r.visite + ' prime visite';
-  const dtCal = (d, t) => d.replace(/-/g, '') + 'T' + t.replace(':', '') + '00';
-  function creaIcs(rows) {
-    const p = n => String(n).padStart(2, '0'), n = new Date();
-    const stamp = n.getUTCFullYear() + p(n.getUTCMonth() + 1) + p(n.getUTCDate()) + 'T' + p(n.getUTCHours()) + p(n.getUTCMinutes()) + p(n.getUTCSeconds()) + 'Z';
-    const x = s => String(s).replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
-    const righe = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Ortopedia Verduno//Prestazioni aggiuntive//IT', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
-      'BEGIN:VTIMEZONE', 'TZID:Europe/Rome',
-      'BEGIN:DAYLIGHT', 'TZOFFSETFROM:+0100', 'TZOFFSETTO:+0200', 'TZNAME:CEST', 'DTSTART:19700329T020000', 'RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU', 'END:DAYLIGHT',
-      'BEGIN:STANDARD', 'TZOFFSETFROM:+0200', 'TZOFFSETTO:+0100', 'TZNAME:CET', 'DTSTART:19701025T030000', 'RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU', 'END:STANDARD',
-      'END:VTIMEZONE'];
-    rows.forEach(r => righe.push('BEGIN:VEVENT', 'UID:' + r.id + '@pa-ambulatoriali', 'DTSTAMP:' + stamp,
-      'DTSTART;TZID=Europe/Rome:' + dtCal(r.data, r.inizio), 'DTEND;TZID=Europe/Rome:' + dtCal(r.data, r.fine),
-      'SUMMARY:' + x(titoloCal(r)), 'LOCATION:' + x(LUOGHI[r.sede] || r.sede), 'DESCRIPTION:' + x(notaCal(r)), 'END:VEVENT'));
-    righe.push('END:VCALENDAR');
-    return righe.join('\r\n') + '\r\n';
-  }
-  const suIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  function apriIcs(rows, nome) {
-    const ics = creaIcs(rows);
-    if (suIOS()) { location.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics); return; }   // iPhone: si apre il Calendario
-    const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
-    const a = document.createElement('a'); a.href = url; a.download = nome + '.ics';
-    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 5000);
-    toast('File calendario scaricato: aprilo per aggiungere ' + (rows.length === 1 ? 'l’ambulatorio' : 'gli ambulatori'));
-  }
-  const linkGoogle = r => 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
-    '&text=' + encodeURIComponent(titoloCal(r)) + '&dates=' + dtCal(r.data, r.inizio) + '/' + dtCal(r.data, r.fine) +
-    '&ctz=Europe/Rome&location=' + encodeURIComponent(LUOGHI[r.sede] || r.sede) + '&details=' + encodeURIComponent(notaCal(r));
-  const mieiDelMese = () => (S.cache[key(S.anno, S.mese)] || []).filter(r => r.medico === S.io);
-  function renderCal() {
-    const rows = mieiDelMese();
-    const caricato = !!S.cache[key(S.anno, S.mese)];
-    $('calList').innerHTML = !caricato ? '<div class="cal-empty">Caricamento…</div>' : rows.length ? rows.map(r =>
-      '<div class="cal-row"><div class="t"><b>' + esc(nomeGiorno(r.data)) + '</b><small>' + r.inizio + '–' + r.fine + ' · ' + esc(r.sede) + ' · ' + r.visite + ' prime visite</small></div>' +
-      '<button class="btn" data-calid="' + esc(r.id) + '">' + ICO.calplus + '<span class="lab">Aggiungi</span></button>' +
-      '<a class="btn" href="' + linkGoogle(r) + '" target="_blank" rel="noopener">Google</a></div>').join('')
-      : '<div class="cal-empty">Nessun tuo ambulatorio in ' + MESI[S.mese - 1].toLowerCase() + ' ' + S.anno + '.</div>';
-    $('calTitle').textContent = 'I miei ambulatori di ' + MESI[S.mese - 1].toLowerCase();
-    $('calAll').classList.remove('hidden');
-    $('calAll').disabled = !rows.length;
-    $('calAll').querySelector('span').textContent = rows.length > 1 ? 'Aggiungi tutti (' + rows.length + ')' : 'Aggiungi';
-  }
-  $('calAll').onclick = () => { const rows = mieiDelMese(); if (rows.length) apriIcs(rows, 'Ambulatori_' + MESI[S.mese - 1] + '_' + S.anno); };
-  document.addEventListener('click', e => {
-    const b = e.target.closest('[data-calid]'); if (!b) return;
-    const id = b.dataset.calid;
-    const r = Object.values(S.cache).flat().find(x => x.id === id);
-    if (!r) return;
-    if (b.closest('#mCal')) { apriIcs([r], 'Ambulatorio_' + r.data); return; }
-    apriSceltaCal(r);
-  });
-  function apriSceltaCal(r) {
-    $('calList').innerHTML = '<div class="cal-row"><div class="t"><b>' + esc(nomeGiorno(r.data)) + '</b><small>' + r.inizio + '–' + r.fine + ' · ' + esc(r.sede) + ' · ' + r.visite + ' prime visite</small></div>' +
-      '<button class="btn" data-calid="' + esc(r.id) + '" data-solo="1">' + ICO.calplus + 'Aggiungi</button><a class="btn" href="' + linkGoogle(r) + '" target="_blank" rel="noopener">Google</a></div>';
-    chiudiTutto(); $('overlay').classList.add('on'); $('mCal').classList.add('on');
-    S.calSingolo = true;
-    $('calTitle').textContent = 'Aggiungi al calendario';
-    $('calAll').disabled = true; $('calAll').classList.add('hidden');
-  }
 
   // ---------- dati in CSV ----------
   async function scaricaCsv() {
